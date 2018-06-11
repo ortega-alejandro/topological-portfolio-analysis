@@ -1,11 +1,4 @@
----
-title: "math412"
-author: "Alejandro Ortega"
-date: "April 17, 2018"
-output: html_document
----
-
-```{r setup}
+# Load Data
 library("TDA")
 vasax.s = read.csv("data/VASAX_securities.csv")
 vasax.s = transform(vasax.s, date = as.Date(as.character(date), "%Y%m%d"))
@@ -13,9 +6,9 @@ vtsax.s = read.csv("data/VTSAX_securities.csv")
 vtsax.s = transform(vtsax.s, date = as.Date(as.character(date), "%Y%m%d"))
 vhdyx.s = read.csv("data/VHDYX_securities.csv")
 vhdyx.s = transform(vhdyx.s, date = as.Date(as.character(date), "%Y%m%d"))
-```
 
-```{r functions}
+# Function Defintions for Sliding Window Analysis
+
 persistence = function(df, w, t, d, scale) {
   temp = sliding.window2(df, w, t)
   temp.data = prepData(temp)
@@ -74,50 +67,33 @@ prepData = function(df){
   return(X)
 }
 
+# Cbindpad from a stackoverflow answer by Kevin Ushey; link: https://stackoverflow.com/questions/14899306/transform-a-splitted-data-frame-in-a-new-data-frame
+
 cbindPad <- function(...){
   args <- list(...)
   n <- sapply(args,nrow)
   mx <- max(n)
   pad <- function(x, mx){
-      if (nrow(x) < mx){
-          nms <- colnames(x)
-          padTemp <- matrix(NA, mx - nrow(x), ncol(x))
-          colnames(padTemp) <- nms
-          if (ncol(x)==0) {
-            return(padTemp)
-          } else {
-          return(rbind(x,padTemp))
-            }
+    if (nrow(x) < mx){
+      nms <- colnames(x)
+      padTemp <- matrix(NA, mx - nrow(x), ncol(x))
+      colnames(padTemp) <- nms
+      if (ncol(x)==0) {
+        return(padTemp)
+      } else {
+        return(rbind(x,padTemp))
       }
-      else{
-          return(x)
-      }
+    }
+    else{
+      return(x)
+    }
   }
   rs <- lapply(args,pad,mx)
   return(do.call(cbind,rs))
 }
-```
 
-```{r plots}
+# Sliding window plot
 
 X = gen.windows(vasax.s, vtsax.s, 5, 1, .5)
 
-plot(A.0$X0.0163569127047393 ~ (A.0$X1), type = "l", xlab = "Time (Window Step)", ylab = "Wasserstein Distance", main = "Wasserstein Distance Sliding Window, dimension 0", col="black")
-
-lines(B.0$X0 ~ (B.0$X1), type = "l", col = "red")
-
-plot(Y$X3.26193858364268 ~ (Y$X1), type = "lines", xlab = "Time", ylab = "Wasserstein Distance", main = "Wasserstein Distance Against Baseline Fund, Risk Resilient")
-
-sliding.window2 = function(df, w, t){
-  X = data.frame()
-  d = df[df$date >= date.range[t] & df$date <= date.range[t + w],]
-  X = cbindPad(X, d)
-  
-  return(X)
-}
-
-
-print(wasserstein(Diag1 = Diag[["diagram"]], Diag2 = Diag2[["diagram"]], p = 2, dimension = 1))
-
-```
-
+plot(X$X8.55360840981008 ~ (X$X1), type = "l", xlab = "Time (Window Step)", ylab = "Wasserstein Distance", main = "Wasserstein Distance Sliding Window, dimension 1", col="black")
