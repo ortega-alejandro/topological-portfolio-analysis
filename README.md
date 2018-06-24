@@ -4,6 +4,6 @@ Final Project for Math 412/CS 434: _Topological Data Analysis_ taught by Dr. Gre
 * Programming the __R__ scripts that implemented the sliding window analysis technique that evaluated the topological changes of portfolios
 * Latexing and editing the final paper
 
-### Course Grade Earned: A
-
 ### Project Members: Alejandro Ortega, Andre Wang, Fred Xu
+
+### Course Grade Earned: A
